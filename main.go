@@ -4,15 +4,24 @@ import (
 	"log"
 	"net/http"
 
+	"gopkg.in/mgo.v2"
+
 	"github.com/reviewservice/app"
 	"github.com/reviewservice/routers"
 )
 
+/*
+AppContext ...
+*/
+type AppContext struct {
+	session *mgo.Session
+}
+
 func main() {
-	app.Boot()
+	config := app.GetConf("app/config.json")
 	router := routers.Init()
 	server := &http.Server{
-		Addr:    app.Config.Server,
+		Addr:    config.Server,
 		Handler: router,
 	}
 	log.Fatal(server.ListenAndServe())

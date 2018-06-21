@@ -7,30 +7,30 @@ import (
 )
 
 /*
-configuration ...
+Configuration ...
 */
-type configuration struct {
-	Server string
+type Configuration struct {
+	Server      string
+	MongoDBHost string
+	DBUser      string
+	DBPwd       string
+	Database    string
 }
 
 /*
-Config ...
+GetConf ...
 */
-var Config configuration
-
-/*
-LoadConfiguration ...
-*/
-func loadConfiguration() {
-	file, err := os.Open("app/config.json")
+func GetConf(filename string) *Configuration {
+	file, err := os.Open(filename)
 	defer file.Close()
 	if err != nil {
-		log.Fatalf("[loadConfig]: %s\n", err)
+		log.Fatalf("[loading configuration]: %s\n", err)
 	}
 	decoder := json.NewDecoder(file)
-	Config = configuration{}
-	err = decoder.Decode(&Config)
+	config := &Configuration{}
+	err = decoder.Decode(&config)
 	if err != nil {
-		log.Fatalf("[logAppConfig]: %s\n", err)
+		log.Fatalf("[loading application config]: %s\n", err)
 	}
+	return config
 }
